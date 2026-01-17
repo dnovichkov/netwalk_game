@@ -2,6 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css';
+import { initCapacitor } from './utils/capacitor';
+
+// Initialize Capacitor native features
+initCapacitor();
 
 const rootElement = document.getElementById('root');
 
