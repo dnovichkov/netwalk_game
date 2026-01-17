@@ -39,6 +39,7 @@ ios/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.playwright-mcp/
 
 # TypeScript build artifacts
 *.tsbuildinfo
