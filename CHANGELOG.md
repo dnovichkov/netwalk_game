@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/dnovichkov/netwalk_game/compare/v1.2.0...v1.3.0) (2026-01-17)
+
+
+### Features
+
+* add GitHub Pages deployment ([d7c599b](https://github.com/dnovichkov/netwalk_game/commit/d7c599b300d368ee5330df531bb66bd43d476736))
+
 # [1.2.0](https://github.com/dnovichkov/netwalk_game/compare/v1.1.1...v1.2.0) (2026-01-17)
 
 
