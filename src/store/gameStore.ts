@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import {
   GameState,
   Difficulty,
@@ -37,13 +38,15 @@ const levelGenerator = new LevelGenerator();
 const connectionValidator = new ConnectionValidator();
 const scoreCalculator = new ScoreCalculator();
 
-export const useGameStore = create<GameStore>((set, get) => ({
-  gameState: null,
-  isPlaying: false,
-  history: [],
-  lastScore: null,
+export const useGameStore = create<GameStore>()(
+  persist(
+    (set, get) => ({
+      gameState: null,
+      isPlaying: false,
+      history: [],
+      lastScore: null,
 
-  newGame: (difficulty: Difficulty) => {
+      newGame: (difficulty: Difficulty) => {
     const gameState = levelGenerator.generate(difficulty);
     set({
       gameState,
@@ -244,4 +247,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
       lastScore: null,
     });
   },
-}));
+    }),
+    {
+      name: 'netwalk-game',
+      partialize: (state) => ({
+        gameState: state.gameState,
+      }),
+      onRehydrateStorage: () => (state) => {
+        // Restore connection state after rehydration
+        if (state?.gameState && !state.gameState.isCompleted) {
+          const grid = Grid.fromData(state.gameState.grid);
+          connectionValidator.findConnectedCells(grid);
+
+          const updatedGrid: CellData[][] = [];
+          for (let row = 0; row < state.gameState.height; row++) {
+            const rowData: CellData[] = [];
+            for (let col = 0; col < state.gameState.width; col++) {
+              const cell = grid.getCell(col, row);
+              if (cell) {
+                rowData.push(cell.toData());
+              }
+            }
+            updatedGrid.push(rowData);
+          }
+
+          state.gameState = {
+            ...state.gameState,
+            grid: updatedGrid,
+            isPaused: true, // Start paused after restore
+          };
+        }
+      },
+    }
+  )
+);
