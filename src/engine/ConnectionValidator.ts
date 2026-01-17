@@ -119,7 +119,7 @@ export class ConnectionValidator {
         return;
       }
 
-      if (cell.isEmpty()) return;
+      if (cell.isEmpty() || cell.isServer()) return;
 
       const openDirs = cell.getOpenDirections();
 

@@ -98,40 +98,38 @@ describe('ConnectionValidator', () => {
   });
 
   describe('findHangingEnds', () => {
-    it('should find connections pointing to grid edge', () => {
+    it('should not count server connections as hanging ends', () => {
       const grid = new Grid(1, 1);
-
-      // Server at (0,0) has connections in all directions
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
 
       const connected = validator.findConnectedCells(grid);
       const hangingEnds = validator.findHangingEnds(grid, connected);
 
-      // All 4 directions are hanging
-      expect(hangingEnds).toHaveLength(4);
+      // Server is excluded from hanging end checks
+      expect(hangingEnds).toHaveLength(0);
     });
 
     it('should find unmatched connections between cells', () => {
-      const grid = new Grid(2, 1);
+      const grid = new Grid(3, 1);
 
-      // Server with E-W-N-S connections
+      // SERVER - CROSS (connects all 4 dirs) - empty cell
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      // STRAIGHT N-S (doesn't connect to server's EAST)
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 }));
+      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.CROSS })); // connects all 4
+      // Cell at (2,0) is empty
 
       const connected = validator.findConnectedCells(grid);
       const hangingEnds = validator.findHangingEnds(grid, connected);
 
-      // Server has hanging end pointing EAST (no matching connection)
+      // CROSS has hanging end pointing EAST (empty neighbor)
       const eastHanging = hangingEnds.find(
-        (h) => h.position.x === 0 && h.position.y === 0 && h.direction === Direction.EAST
+        (h) => h.position.x === 1 && h.position.y === 0 && h.direction === Direction.EAST
       );
       expect(eastHanging).toBeDefined();
     });
 
     it('should return empty array when all connections match', () => {
       // Test with a simple server-computer pair
-      // Server has connections in all 4 directions, computer only in one
+      // Server is excluded from hanging end checks
       const pairGrid = new Grid(2, 1);
       pairGrid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
       pairGrid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
@@ -139,10 +137,9 @@ describe('ConnectionValidator', () => {
       const pairConnected = validator.findConnectedCells(pairGrid);
       const pairHanging = validator.findHangingEnds(pairGrid, pairConnected);
 
-      // Server has hanging ends: N, S, W (edge)
-      // Computer has none (only W which connects to server)
-      // So there should be 3 hanging ends
-      expect(pairHanging.length).toBe(3);
+      // Server is excluded from hanging end checks
+      // Computer has no hanging ends (only W which connects to server)
+      expect(pairHanging.length).toBe(0);
     });
   });
 
@@ -167,7 +164,7 @@ describe('ConnectionValidator', () => {
       expect(result.disconnectedComputers).toHaveLength(1);
     });
 
-    it('should return invalid if there are hanging ends', () => {
+    it('should return valid when server-computer are properly connected', () => {
       const grid = new Grid(2, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
@@ -175,50 +172,59 @@ describe('ConnectionValidator', () => {
 
       const result = validator.validate(grid);
 
-      // Even though computer is connected, server has hanging ends
+      // Server is excluded from hanging end checks
+      // Computer is connected, no hanging ends from non-server cells
+      expect(result.isValid).toBe(true);
+      expect(result.hangingEnds.length).toBe(0);
+    });
+
+    it('should return invalid if non-server cells have hanging ends', () => {
+      const grid = new Grid(3, 1);
+
+      // SERVER - CROSS - empty (CROSS has hanging end to EAST)
+      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
+      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.CROSS }));
+
+      const result = validator.validate(grid);
+
+      // CROSS has hanging ends (connects in all 4 dirs, only W matches server)
       expect(result.isValid).toBe(false);
       expect(result.hangingEnds.length).toBeGreaterThan(0);
+    });
+
+    it('should mark puzzle as solved when all computers connected', () => {
+      // SERVER - STRAIGHT - COMPUTER in a line
+      const grid = new Grid(3, 1);
+      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
+      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })); // E-W
+      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+
+      const result = validator.validate(grid);
+
+      expect(result.disconnectedComputers).toHaveLength(0);
+      expect(result.hangingEnds).toHaveLength(0); // Server excluded
+      expect(result.isValid).toBe(true);
     });
   });
 
   describe('isSolved', () => {
-    it('should return false for unsolved puzzle', () => {
+    it('should return false for unsolved puzzle with disconnected computer', () => {
       const grid = new Grid(3, 3);
       grid.setCell(1, 1, new Cell({ x: 1, y: 1, type: CellType.SERVER }));
+      // Add disconnected computer
+      grid.setCell(2, 2, new Cell({ x: 2, y: 2, type: CellType.COMPUTER }));
 
       expect(validator.isSolved(grid)).toBe(false);
     });
 
     it('should return true for properly solved puzzle', () => {
-      // Create a minimal solved puzzle:
-      // Server in center with 4 computers around it, all properly connected
-      // This is complex to set up properly, so let's verify the logic works
-      // by checking the validation flow
+      // SERVER - STRAIGHT - COMPUTER (all properly connected)
+      const grid = new Grid(3, 1);
+      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
+      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })); // E-W
+      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
 
-      // A 3x3 grid where:
-      // - Center is server
-      // - Each side has a computer pointing inward
-      // - Corners are empty
-      const grid = new Grid(3, 3);
-
-      grid.setCell(1, 1, new Cell({ x: 1, y: 1, type: CellType.CROSS })); // Server substitute
-      // Actually let's use SERVER type but limit its connections
-
-      // For a truly solved puzzle, we need:
-      // 1. Server that ONLY connects to where computers are
-      // 2. Computers that connect back to server
-      // 3. No other cells with connections
-
-      // Simplest solved: 1x3 with SERVER-STRAIGHT-COMPUTER
-      // But server connects all 4 dirs, so still has hanging ends
-
-      // Actually per the game rules, a valid solved state has NO hanging ends
-      // which means every connection must be matched.
-      // This is very hard to achieve in a small grid.
-
-      // Let's verify the algorithm works correctly for the "almost solved" case
-      const almostSolved = validator.isSolved(grid);
-      expect(almostSolved).toBe(false); // Not solved due to hanging ends
+      expect(validator.isSolved(grid)).toBe(true);
     });
   });
 
@@ -259,7 +265,7 @@ describe('ConnectionValidator', () => {
       expect(stats.connectedCells).toBe(3);
       expect(stats.totalComputers).toBe(1);
       expect(stats.connectedComputers).toBe(1);
-      expect(stats.hangingEndCount).toBeGreaterThan(0); // Has edge connections
+      expect(stats.hangingEndCount).toBe(0); // All connections matched, server excluded
     });
   });
 
