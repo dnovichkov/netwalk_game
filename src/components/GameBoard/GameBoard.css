@@ -1,0 +1,133 @@
+/* Game Board */
+.game-board {
+  display: grid;
+  gap: 2px;
+  background-color: #2d3748;
+  padding: 8px;
+  border-radius: 8px;
+  max-width: min(90vw, 500px);
+  max-height: min(90vw, 500px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+/* Cell */
+.cell {
+  background-color: #16213e;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease-out, background-color 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  aspect-ratio: 1;
+}
+
+.cell:hover {
+  background-color: #1e2d4d;
+}
+
+.cell:active {
+  background-color: #253a5e;
+}
+
+.cell.locked {
+  cursor: default;
+}
+
+.cell.locked:hover {
+  background-color: #16213e;
+}
+
+.cell.connected {
+  background-color: #1a2e3a;
+}
+
+/* Cell Icon */
+.cell-icon {
+  width: 100%;
+  height: 100%;
+  padding: 8%;
+}
+
+/* Cables */
+.cable {
+  stroke: #4a4a5a;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transition: stroke 0.2s ease;
+}
+
+.cable.connected {
+  stroke: #00d26a;
+}
+
+/* Server */
+.server-body {
+  fill: #ffd93d;
+  stroke: #e6c235;
+  stroke-width: 2;
+}
+
+.server-led {
+  fill: #00d26a;
+}
+
+.server-slot {
+  fill: #1a1a2e;
+}
+
+/* Computer */
+.computer-body {
+  fill: #3498db;
+  stroke: #2980b9;
+  stroke-width: 2;
+}
+
+.computer-screen {
+  fill: #1a1a2e;
+  transition: fill 0.2s ease;
+}
+
+.computer-screen.on {
+  fill: #2ecc71;
+}
+
+.computer-stand {
+  fill: #2980b9;
+}
+
+.computer-base {
+  fill: #3498db;
+}
+
+/* Empty cell */
+.cell-empty {
+  background-color: #0d1520;
+}
+
+.cell-empty:hover {
+  background-color: #0d1520;
+  cursor: default;
+}
+
+/* Animation for rotation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 210, 106, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 210, 106, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 210, 106, 0);
+  }
+}
+
+.cell.connected.cell-computer {
+  animation: pulse 0.5s ease-out;
+}

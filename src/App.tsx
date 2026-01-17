@@ -1,20 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-function MainMenu() {
-  return (
-    <div className="menu">
-      <h1>NetWalk</h1>
-      <p>Игра в разработке...</p>
-    </div>
-  );
-}
+import {
+  MainMenu,
+  DifficultySelect,
+  GameScreen,
+  LeaderboardScreen,
+  SettingsScreen,
+} from './screens';
+import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainMenu />} />
-      </Routes>
+      <div className="app">
+        <Routes>
+          <Route path="/" element={<MainMenu />} />
+          <Route path="/difficulty" element={<DifficultySelect />} />
+          <Route path="/game" element={<GameScreen />} />
+          <Route path="/leaderboard" element={<LeaderboardScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
