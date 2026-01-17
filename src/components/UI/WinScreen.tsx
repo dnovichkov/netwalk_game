@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useGameStore, useLeaderboardStore } from '../../store';
+import { useSound } from '../../hooks';
 import './UI.css';
 
 interface WinScreenProps {
@@ -15,9 +16,13 @@ export function WinScreen({ onPlayAgain, onMainMenu }: WinScreenProps) {
   const incrementGamesWon = useLeaderboardStore((state) => state.incrementGamesWon);
   const addTime = useLeaderboardStore((state) => state.addTime);
   const addMoves = useLeaderboardStore((state) => state.addMoves);
+  const { playWinMelody } = useSound();
 
   useEffect(() => {
     if (gameState && lastScore) {
+      // Play win sound
+      playWinMelody();
+
       // Update statistics
       incrementGamesWon();
       addTime(gameState.elapsedTime);

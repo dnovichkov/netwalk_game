@@ -1,25 +1,35 @@
 import { useCallback } from 'react';
 import { CellComponent } from './CellComponent';
 import { useGameStore } from '../../store';
+import { useSound } from '../../hooks';
 import './GameBoard.css';
 
 export function GameBoard() {
   const gameState = useGameStore((state) => state.gameState);
   const rotateCell = useGameStore((state) => state.rotateCell);
+  const { playClick } = useSound();
 
   const handleClick = useCallback(
     (x: number, y: number) => {
+      const cell = gameState?.grid[y]?.[x];
+      if (cell && !cell.isLocked) {
+        playClick();
+      }
       rotateCell(x, y, true);
     },
-    [rotateCell]
+    [rotateCell, gameState, playClick]
   );
 
   const handleContextMenu = useCallback(
     (e: React.MouseEvent, x: number, y: number) => {
       e.preventDefault();
+      const cell = gameState?.grid[y]?.[x];
+      if (cell && !cell.isLocked) {
+        playClick();
+      }
       rotateCell(x, y, false);
     },
-    [rotateCell]
+    [rotateCell, gameState, playClick]
   );
 
   if (!gameState) {
