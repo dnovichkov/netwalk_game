@@ -3,6 +3,14 @@ import { useGameStore, useLeaderboardStore } from '../../store';
 import { useSound } from '../../hooks';
 import './UI.css';
 
+// Track recorded games to prevent duplicate entries (survives component remounts)
+const recordedGames = new Set<number>();
+
+// Export for testing purposes
+export function clearRecordedGames(): void {
+  recordedGames.clear();
+}
+
 interface WinScreenProps {
   onPlayAgain: () => void;
   onMainMenu: () => void;
@@ -19,24 +27,30 @@ export function WinScreen({ onPlayAgain, onMainMenu }: WinScreenProps) {
   const { playWinMelody } = useSound();
 
   useEffect(() => {
-    if (gameState && lastScore) {
-      // Play win sound
-      playWinMelody();
+    if (!gameState || !lastScore) return;
 
-      // Update statistics
-      incrementGamesWon();
-      addTime(gameState.elapsedTime);
-      addMoves(gameState.moves);
+    // Use startTime as unique game identifier to prevent duplicate recording
+    const gameId = gameState.startTime;
+    if (recordedGames.has(gameId)) return;
 
-      // Add to leaderboard
-      addEntry({
-        difficulty: gameState.difficulty,
-        score: lastScore.score,
-        moves: gameState.moves,
-        time: gameState.elapsedTime,
-      });
-    }
-  }, []);
+    recordedGames.add(gameId);
+
+    // Play win sound
+    playWinMelody();
+
+    // Update statistics
+    incrementGamesWon();
+    addTime(gameState.elapsedTime);
+    addMoves(gameState.moves);
+
+    // Add to leaderboard
+    addEntry({
+      difficulty: gameState.difficulty,
+      score: lastScore.score,
+      moves: gameState.moves,
+      time: gameState.elapsedTime,
+    });
+  }, [gameState, lastScore, playWinMelody, incrementGamesWon, addTime, addMoves, addEntry]);
 
   if (!gameState || !lastScore) {
     return null;
