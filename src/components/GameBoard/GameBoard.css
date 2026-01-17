@@ -115,19 +115,39 @@
   cursor: default;
 }
 
-/* Animation for rotation */
-@keyframes pulse {
+/* Animation for connection */
+@keyframes connect-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(0, 210, 106, 0.4);
+    box-shadow: 0 0 0 0 rgba(0, 210, 106, 0.6);
   }
-  70% {
-    box-shadow: 0 0 0 10px rgba(0, 210, 106, 0);
+  50% {
+    box-shadow: 0 0 8px 4px rgba(0, 210, 106, 0.4);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(0, 210, 106, 0);
   }
 }
 
+@keyframes cable-glow {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.cell.just-connected {
+  animation: connect-pulse 0.3s ease-out;
+}
+
+.cell.just-connected .cable.connected {
+  animation: cable-glow 0.3s ease-out;
+}
+
 .cell.connected.cell-computer {
-  animation: pulse 0.5s ease-out;
+  animation: connect-pulse 0.5s ease-out;
 }

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { CellData, CellType } from '../../engine/types';
 import './GameBoard.css';
 
@@ -12,6 +12,8 @@ export function CellComponent({ cell, onClick, onContextMenu }: CellComponentPro
   // Track cumulative rotation for smooth animation
   const rotationRef = useRef(cell.rotation * 90);
   const prevRotationRef = useRef(cell.rotation);
+  const prevConnectedRef = useRef(cell.isConnected);
+  const [justConnected, setJustConnected] = useState(false);
 
   useEffect(() => {
     const prevRotation = prevRotationRef.current;
@@ -30,11 +32,30 @@ export function CellComponent({ cell, onClick, onContextMenu }: CellComponentPro
     }
   }, [cell.rotation]);
 
+  // Track connection state changes for animation
+  useEffect(() => {
+    const wasConnected = prevConnectedRef.current;
+    const isNowConnected = cell.isConnected;
+
+    if (!wasConnected && isNowConnected) {
+      // Cell just got connected - trigger animation
+      setJustConnected(true);
+      const timer = setTimeout(() => setJustConnected(false), 300);
+      return () => clearTimeout(timer);
+    }
+
+    prevConnectedRef.current = isNowConnected;
+  }, [cell.isConnected]);
+
   const getCellClass = () => {
     const classes = ['cell'];
 
     if (cell.isConnected) {
       classes.push('connected');
+    }
+
+    if (justConnected) {
+      classes.push('just-connected');
     }
 
     if (cell.isLocked) {
