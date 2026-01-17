@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/dnovichkov/netwalk_game/compare/v1.1.0...v1.1.1) (2026-01-17)
+
+
+### Bug Fixes
+
+* **ui:** prevent duplicate statistics recording on WinScreen remount ([1a62357](https://github.com/dnovichkov/netwalk_game/commit/1a623578a00a10f47f35dceaf801ad1004e9c153))
+
 # [1.1.0](https://github.com/dnovichkov/netwalk_game/compare/v1.0.0...v1.1.0) (2026-01-17)
 
 
