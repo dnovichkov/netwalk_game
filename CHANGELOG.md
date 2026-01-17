@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/dnovichkov/netwalk_game/compare/v1.1.1...v1.2.0) (2026-01-17)
+
+
+### Features
+
+* **android:** add Capacitor integration for Android build ([3c3684e](https://github.com/dnovichkov/netwalk_game/commit/3c3684e05dd071b46892a30715161944b278287d))
+
 ## [1.1.1](https://github.com/dnovichkov/netwalk_game/compare/v1.1.0...v1.1.1) (2026-01-17)
 
 
