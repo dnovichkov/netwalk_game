@@ -3,7 +3,11 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
 
+// Base path for GitHub Pages deployment
+const base = process.env.GITHUB_PAGES === 'true' ? '/netwalk_game/' : '/';
+
 export default defineConfig({
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -17,7 +21,7 @@ export default defineConfig({
         background_color: '#1a1a2e',
         display: 'standalone',
         orientation: 'any',
-        start_url: '/',
+        start_url: base,
         icons: [
           {
             src: 'icons/icon-192.svg',
