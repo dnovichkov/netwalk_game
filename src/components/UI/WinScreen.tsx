@@ -7,6 +7,7 @@ import './UI.css';
 const recordedGames = new Set<number>();
 
 // Export for testing purposes
+// eslint-disable-next-line react-refresh/only-export-components
 export function clearRecordedGames(): void {
   recordedGames.clear();
 }

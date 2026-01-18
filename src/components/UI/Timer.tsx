@@ -14,7 +14,7 @@ export function Timer() {
 
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [isPlaying, gameState?.isCompleted, gameState?.isPaused, tick]);
+  }, [isPlaying, gameState, tick]);
 
   if (!gameState) {
     return null;
