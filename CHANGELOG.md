@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/dnovichkov/netwalk_game/compare/v1.3.0...v1.3.1) (2026-01-18)
+
+
+### Bug Fixes
+
+* add basename to BrowserRouter for GitHub Pages routing ([0f4e53e](https://github.com/dnovichkov/netwalk_game/commit/0f4e53ebdd856a06efa3b7b914ed1557d16e9661))
+
 # [1.3.0](https://github.com/dnovichkov/netwalk_game/compare/v1.2.0...v1.3.0) (2026-01-17)
 
 
