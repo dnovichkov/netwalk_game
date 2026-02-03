@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/dnovichkov/netwalk_game/compare/v1.3.2...v1.3.3) (2026-02-03)
+
+
+### Bug Fixes
+
+* improve cell rotation performance and animation responsiveness ([cfaffd9](https://github.com/dnovichkov/netwalk_game/commit/cfaffd9150e252f7bb497e7cd0425e063d699f01))
+
 ## [1.3.2](https://github.com/dnovichkov/netwalk_game/compare/v1.3.1...v1.3.2) (2026-01-18)
 
 
