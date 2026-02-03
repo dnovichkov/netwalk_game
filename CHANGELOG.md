@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/dnovichkov/netwalk_game/compare/v1.3.1...v1.3.2) (2026-01-18)
+
+
+### Bug Fixes
+
+* resolve ESLint warnings ([584fcaa](https://github.com/dnovichkov/netwalk_game/commit/584fcaa46de02a263ae230c3d33d7a4c1e668111))
+
 ## [1.3.1](https://github.com/dnovichkov/netwalk_game/compare/v1.3.0...v1.3.1) (2026-01-18)
 
 
