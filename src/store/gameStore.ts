@@ -83,9 +83,10 @@ export const useGameStore = create<GameStore>()(
       })
     );
 
-    // Check connections using Grid class
+    // Check connections using Grid class (single validation pass)
     const grid = Grid.fromData(newGrid);
-    connectionValidator.findConnectedCells(grid);
+    const validation = connectionValidator.validate(grid);
+    const isSolved = validation.isValid;
 
     // Update grid data with connection status
     const updatedGrid: CellData[][] = [];
@@ -99,9 +100,6 @@ export const useGameStore = create<GameStore>()(
       }
       updatedGrid.push(rowData);
     }
-
-    // Check if puzzle is solved
-    const isSolved = connectionValidator.isSolved(grid);
 
     const newState: GameState = {
       ...gameState,

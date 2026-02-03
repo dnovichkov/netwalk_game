@@ -10,27 +10,28 @@ interface CellComponentProps {
 
 export function CellComponent({ cell, onClick, onContextMenu }: CellComponentProps) {
   // Track cumulative rotation for smooth animation
-  const rotationRef = useRef(cell.rotation * 90);
+  const cumulativeRotationRef = useRef(cell.rotation * 90);
   const prevRotationRef = useRef(cell.rotation);
   const prevConnectedRef = useRef(cell.isConnected);
   const [justConnected, setJustConnected] = useState(false);
 
-  useEffect(() => {
-    const prevRotation = prevRotationRef.current;
-    const newRotation = cell.rotation;
+  // Calculate rotation synchronously during render (not in useEffect)
+  const prevRotation = prevRotationRef.current;
+  const newRotation = cell.rotation;
 
-    if (prevRotation !== newRotation) {
-      // Calculate the shortest rotation direction
-      let delta = newRotation - prevRotation;
+  if (prevRotation !== newRotation) {
+    // Calculate the shortest rotation direction
+    let delta = newRotation - prevRotation;
 
-      // Handle wrap-around (e.g., 3 -> 0 should be +1, not -3)
-      if (delta === -3) delta = 1;
-      if (delta === 3) delta = -1;
+    // Handle wrap-around (e.g., 3 -> 0 should be +1, not -3)
+    if (delta === -3) delta = 1;
+    if (delta === 3) delta = -1;
 
-      rotationRef.current += delta * 90;
-      prevRotationRef.current = newRotation;
-    }
-  }, [cell.rotation]);
+    cumulativeRotationRef.current += delta * 90;
+    prevRotationRef.current = newRotation;
+  }
+
+  const currentRotation = cumulativeRotationRef.current;
 
   // Track connection state changes for animation
   useEffect(() => {
@@ -93,7 +94,7 @@ export function CellComponent({ cell, onClick, onContextMenu }: CellComponentPro
       onClick={onClick}
       onContextMenu={onContextMenu}
       style={{
-        transform: `rotate(${rotationRef.current}deg)`,
+        transform: `rotate(${currentRotation}deg)`,
       }}
     >
       {renderCellContent()}
