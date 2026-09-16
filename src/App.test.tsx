@@ -5,6 +5,8 @@ import App from './App';
 describe('App', () => {
   it('renders the main menu title', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /NetWalk/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /NetWalk/i })
+    ).toBeInTheDocument();
   });
 });

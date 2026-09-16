@@ -67,8 +67,14 @@ export function useSound() {
 
         // Envelope for smooth sound
         gainNode.gain.setValueAtTime(0, ctx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(config.volume, ctx.currentTime + 0.01);
-        gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + config.duration);
+        gainNode.gain.linearRampToValueAtTime(
+          config.volume,
+          ctx.currentTime + 0.01
+        );
+        gainNode.gain.linearRampToValueAtTime(
+          0,
+          ctx.currentTime + config.duration
+        );
 
         oscillator.start(ctx.currentTime);
         oscillator.stop(ctx.currentTime + config.duration);
@@ -90,7 +96,7 @@ export function useSound() {
 
     try {
       const ctx = getAudioContext();
-      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
       const noteDuration = 0.15;
 
       notes.forEach((freq, index) => {

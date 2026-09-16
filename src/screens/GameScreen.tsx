@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GameBoard } from '../components/GameBoard';
-import { Timer, MoveCounter, GameControls, PauseMenu, WinScreen } from '../components/UI';
+import {
+  Timer,
+  MoveCounter,
+  GameControls,
+  PauseMenu,
+  WinScreen,
+} from '../components/UI';
 import { useGameStore } from '../store';
 import { Difficulty } from '../engine/types';
 import './Screens.css';

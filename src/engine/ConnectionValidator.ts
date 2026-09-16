@@ -22,7 +22,10 @@ export class ConnectionValidator {
    */
   validate(grid: Grid): ValidationResult {
     const connectedCells = this.findConnectedCells(grid);
-    const disconnectedComputers = this.findDisconnectedComputers(grid, connectedCells);
+    const disconnectedComputers = this.findDisconnectedComputers(
+      grid,
+      connectedCells
+    );
     const hangingEnds = this.findHangingEnds(grid, connectedCells);
 
     const isValid =
@@ -94,7 +97,10 @@ export class ConnectionValidator {
   /**
    * Find computers that are not connected to the server
    */
-  findDisconnectedComputers(grid: Grid, connectedCells: Set<string>): Position[] {
+  findDisconnectedComputers(
+    grid: Grid,
+    connectedCells: Set<string>
+  ): Position[] {
     const disconnected: Position[] = [];
 
     grid.forEachCell((cell) => {

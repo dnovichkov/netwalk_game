@@ -9,7 +9,9 @@ interface GameControlsProps {
 export function GameControls({ onPause, onRestart }: GameControlsProps) {
   const undo = useGameStore((state) => state.undo);
   const history = useGameStore((state) => state.history);
-  const isCompleted = useGameStore((state) => state.gameState?.isCompleted ?? false);
+  const isCompleted = useGameStore(
+    (state) => state.gameState?.isCompleted ?? false
+  );
 
   const canUndo = history.length > 0 && !isCompleted;
 

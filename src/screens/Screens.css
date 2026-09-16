@@ -68,7 +68,9 @@
   border: 2px solid var(--accent-color, #4a4a5a);
   border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   min-width: 120px;
 }
 
@@ -164,7 +166,9 @@
   border-radius: 8px;
   color: #a0a0a0;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .tab:hover {

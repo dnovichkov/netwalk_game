@@ -233,7 +233,10 @@ export function rotateDirection(dir: Direction, rotation: number): Direction {
 /**
  * Get directions for a cell type with a given rotation
  */
-export function getOpenDirections(type: CellType, rotation: number): Direction[] {
+export function getOpenDirections(
+  type: CellType,
+  rotation: number
+): Direction[] {
   const baseDirections = BASE_DIRECTIONS[type];
   return baseDirections.map((dir) => rotateDirection(dir, rotation));
 }

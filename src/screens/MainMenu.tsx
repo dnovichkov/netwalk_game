@@ -35,16 +35,25 @@ export function MainMenu() {
           </button>
 
           {hasSavedGame && (
-            <button className="btn btn-secondary btn-large" onClick={handleContinue}>
+            <button
+              className="btn btn-secondary btn-large"
+              onClick={handleContinue}
+            >
               Продолжить
             </button>
           )}
 
-          <button className="btn btn-secondary btn-large" onClick={handleLeaderboard}>
+          <button
+            className="btn btn-secondary btn-large"
+            onClick={handleLeaderboard}
+          >
             Рекорды
           </button>
 
-          <button className="btn btn-secondary btn-large" onClick={handleSettings}>
+          <button
+            className="btn btn-secondary btn-large"
+            onClick={handleSettings}
+          >
             Настройки
           </button>
         </div>

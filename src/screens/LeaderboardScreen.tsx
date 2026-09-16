@@ -12,7 +12,9 @@ const DIFFICULTY_NAMES: Record<Difficulty, string> = {
 
 export function LeaderboardScreen() {
   const navigate = useNavigate();
-  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(Difficulty.EASY);
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(
+    Difficulty.EASY
+  );
   const getTopScores = useLeaderboardStore((state) => state.getTopScores);
   const statistics = useLeaderboardStore((state) => state.statistics);
 
@@ -46,9 +48,7 @@ export function LeaderboardScreen() {
 
       <div className="leaderboard-table">
         {entries.length === 0 ? (
-          <div className="no-entries">
-            Пока нет записей
-          </div>
+          <div className="no-entries">Пока нет записей</div>
         ) : (
           <table>
             <thead>
@@ -87,7 +87,9 @@ export function LeaderboardScreen() {
             <span className="stat-label">Побед</span>
           </div>
           <div className="stat-item">
-            <span className="stat-value">{formatTime(statistics.totalTime)}</span>
+            <span className="stat-value">
+              {formatTime(statistics.totalTime)}
+            </span>
             <span className="stat-label">Общее время</span>
           </div>
           <div className="stat-item">

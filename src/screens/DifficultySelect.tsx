@@ -6,7 +6,9 @@ import './Screens.css';
 export function DifficultySelect() {
   const navigate = useNavigate();
   const newGame = useGameStore((state) => state.newGame);
-  const incrementGamesPlayed = useLeaderboardStore((state) => state.incrementGamesPlayed);
+  const incrementGamesPlayed = useLeaderboardStore(
+    (state) => state.incrementGamesPlayed
+  );
 
   const handleSelectDifficulty = (difficulty: Difficulty) => {
     incrementGamesPlayed();

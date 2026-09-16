@@ -117,9 +117,15 @@ describe('Grid', () => {
       grid.setCell(0, 1, new Cell({ x: 0, y: 1, type: CellType.CROSS }));
 
       // Check neighbors of center cell (1, 1)
-      expect(grid.getNeighbor(1, 1, Direction.NORTH)?.type).toBe(CellType.CORNER);
-      expect(grid.getNeighbor(1, 1, Direction.EAST)?.type).toBe(CellType.STRAIGHT);
-      expect(grid.getNeighbor(1, 1, Direction.SOUTH)?.type).toBe(CellType.T_JUNCTION);
+      expect(grid.getNeighbor(1, 1, Direction.NORTH)?.type).toBe(
+        CellType.CORNER
+      );
+      expect(grid.getNeighbor(1, 1, Direction.EAST)?.type).toBe(
+        CellType.STRAIGHT
+      );
+      expect(grid.getNeighbor(1, 1, Direction.SOUTH)?.type).toBe(
+        CellType.T_JUNCTION
+      );
       expect(grid.getNeighbor(1, 1, Direction.WEST)?.type).toBe(CellType.CROSS);
     });
 
@@ -159,8 +165,16 @@ describe('Grid', () => {
       const grid = new Grid(3, 1);
 
       // Set up: STRAIGHT at (0,0) connecting E-W and STRAIGHT at (1,0) connecting E-W
-      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 1 }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 }));
+      grid.setCell(
+        0,
+        0,
+        new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      );
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      );
 
       expect(grid.areCellsConnected(0, 0, 1, 0)).toBe(true);
     });
@@ -169,8 +183,16 @@ describe('Grid', () => {
       const grid = new Grid(3, 1);
 
       // STRAIGHT N-S and STRAIGHT N-S (not connecting E-W)
-      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 }));
+      grid.setCell(
+        0,
+        0,
+        new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 })
+      );
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 })
+      );
 
       expect(grid.areCellsConnected(0, 0, 1, 0)).toBe(false);
     });
@@ -276,9 +298,21 @@ describe('Grid', () => {
     it('should serialize and deserialize correctly', () => {
       const grid = new Grid(2, 2);
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 }));
-      grid.setCell(0, 1, new Cell({ x: 0, y: 1, type: CellType.CORNER, rotation: 2 }));
-      grid.setCell(1, 1, new Cell({ x: 1, y: 1, type: CellType.COMPUTER, rotation: 3 }));
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      );
+      grid.setCell(
+        0,
+        1,
+        new Cell({ x: 0, y: 1, type: CellType.CORNER, rotation: 2 })
+      );
+      grid.setCell(
+        1,
+        1,
+        new Cell({ x: 1, y: 1, type: CellType.COMPUTER, rotation: 3 })
+      );
 
       const data = grid.toData();
       const restored = Grid.fromData(data);
@@ -312,13 +346,20 @@ describe('Grid', () => {
     it('should find connections pointing to grid edge', () => {
       const grid = new Grid(3, 3);
       // Place STRAIGHT at edge pointing outside
-      grid.setCell(0, 1, new Cell({ x: 0, y: 1, type: CellType.STRAIGHT, rotation: 1 })); // E-W
+      grid.setCell(
+        0,
+        1,
+        new Cell({ x: 0, y: 1, type: CellType.STRAIGHT, rotation: 1 })
+      ); // E-W
 
       const hangingEnds = grid.findHangingEnds();
 
       // Should have hanging end pointing WEST (outside grid)
       const westHanging = hangingEnds.find(
-        (h) => h.position.x === 0 && h.position.y === 1 && h.direction === Direction.WEST
+        (h) =>
+          h.position.x === 0 &&
+          h.position.y === 1 &&
+          h.direction === Direction.WEST
       );
       expect(westHanging).toBeDefined();
     });
@@ -326,8 +367,16 @@ describe('Grid', () => {
     it('should find unmatched connections between cells', () => {
       const grid = new Grid(3, 1);
       // STRAIGHT N-S at (0,0) and STRAIGHT N-S at (1,0) - not connecting
-      grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 }));
+      grid.setCell(
+        0,
+        0,
+        new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 })
+      );
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 })
+      );
 
       const hangingEnds = grid.findHangingEnds();
 

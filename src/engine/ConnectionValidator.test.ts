@@ -32,8 +32,16 @@ describe('ConnectionValidator', () => {
 
       // SERVER - STRAIGHT - COMPUTER (all connected E-W)
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })); // E-W
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      ); // E-W
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       const connected = validator.findConnectedCells(grid);
       expect(connected.size).toBe(3);
@@ -47,8 +55,16 @@ describe('ConnectionValidator', () => {
 
       // SERVER - STRAIGHT (N-S, not connecting) - COMPUTER
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 })); // N-S
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 0 })
+      ); // N-S
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       const connected = validator.findConnectedCells(grid);
       expect(connected.size).toBe(1); // Only server
@@ -60,7 +76,11 @@ describe('ConnectionValidator', () => {
       const grid = new Grid(2, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       validator.findConnectedCells(grid);
 
@@ -74,7 +94,11 @@ describe('ConnectionValidator', () => {
       const grid = new Grid(2, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       const connected = validator.findConnectedCells(grid);
       const disconnected = validator.findDisconnectedComputers(grid, connected);
@@ -87,7 +111,11 @@ describe('ConnectionValidator', () => {
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
       // Gap in the middle
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 }));
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      );
 
       const connected = validator.findConnectedCells(grid);
       const disconnected = validator.findDisconnectedComputers(grid, connected);
@@ -122,7 +150,10 @@ describe('ConnectionValidator', () => {
 
       // CROSS has hanging end pointing EAST (empty neighbor)
       const eastHanging = hangingEnds.find(
-        (h) => h.position.x === 1 && h.position.y === 0 && h.direction === Direction.EAST
+        (h) =>
+          h.position.x === 1 &&
+          h.position.y === 0 &&
+          h.direction === Direction.EAST
       );
       expect(eastHanging).toBeDefined();
     });
@@ -132,7 +163,11 @@ describe('ConnectionValidator', () => {
       // Server is excluded from hanging end checks
       const pairGrid = new Grid(2, 1);
       pairGrid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      pairGrid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      pairGrid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       const pairConnected = validator.findConnectedCells(pairGrid);
       const pairHanging = validator.findHangingEnds(pairGrid, pairConnected);
@@ -168,7 +203,11 @@ describe('ConnectionValidator', () => {
       const grid = new Grid(2, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 }));
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      );
 
       const result = validator.validate(grid);
 
@@ -196,8 +235,16 @@ describe('ConnectionValidator', () => {
       // SERVER - STRAIGHT - COMPUTER in a line
       const grid = new Grid(3, 1);
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })); // E-W
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      ); // E-W
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       const result = validator.validate(grid);
 
@@ -221,8 +268,16 @@ describe('ConnectionValidator', () => {
       // SERVER - STRAIGHT - COMPUTER (all properly connected)
       const grid = new Grid(3, 1);
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })); // E-W
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })); // W
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      ); // E-W
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
 
       expect(validator.isSolved(grid)).toBe(true);
     });
@@ -233,7 +288,11 @@ describe('ConnectionValidator', () => {
       const grid = new Grid(2, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 }));
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      );
 
       expect(validator.isCellConnected(grid, 0, 0)).toBe(true);
       expect(validator.isCellConnected(grid, 1, 0)).toBe(true);
@@ -256,8 +315,16 @@ describe('ConnectionValidator', () => {
       const grid = new Grid(3, 1);
 
       grid.setCell(0, 0, new Cell({ x: 0, y: 0, type: CellType.SERVER }));
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 }));
-      grid.setCell(2, 0, new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 }));
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.STRAIGHT, rotation: 1 })
+      );
+      grid.setCell(
+        2,
+        0,
+        new Cell({ x: 2, y: 0, type: CellType.COMPUTER, rotation: 3 })
+      );
 
       const stats = validator.getStats(grid);
 
@@ -277,10 +344,26 @@ describe('ConnectionValidator', () => {
       grid.setCell(1, 1, new Cell({ x: 1, y: 1, type: CellType.SERVER }));
 
       // 4 computers at edges, pointing toward center
-      grid.setCell(1, 0, new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 2 })); // S
-      grid.setCell(2, 1, new Cell({ x: 2, y: 1, type: CellType.COMPUTER, rotation: 3 })); // W
-      grid.setCell(1, 2, new Cell({ x: 1, y: 2, type: CellType.COMPUTER, rotation: 0 })); // N
-      grid.setCell(0, 1, new Cell({ x: 0, y: 1, type: CellType.COMPUTER, rotation: 1 })); // E
+      grid.setCell(
+        1,
+        0,
+        new Cell({ x: 1, y: 0, type: CellType.COMPUTER, rotation: 2 })
+      ); // S
+      grid.setCell(
+        2,
+        1,
+        new Cell({ x: 2, y: 1, type: CellType.COMPUTER, rotation: 3 })
+      ); // W
+      grid.setCell(
+        1,
+        2,
+        new Cell({ x: 1, y: 2, type: CellType.COMPUTER, rotation: 0 })
+      ); // N
+      grid.setCell(
+        0,
+        1,
+        new Cell({ x: 0, y: 1, type: CellType.COMPUTER, rotation: 1 })
+      ); // E
 
       const result = validator.validate(grid);
 

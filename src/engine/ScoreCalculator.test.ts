@@ -12,7 +12,11 @@ describe('ScoreCalculator', () => {
   describe('calculate', () => {
     it('should calculate base score correctly', () => {
       const config = DIFFICULTY_CONFIG[Difficulty.EASY];
-      const result = calculator.calculate(Difficulty.EASY, config.idealTime, config.idealMoves);
+      const result = calculator.calculate(
+        Difficulty.EASY,
+        config.idealTime,
+        config.idealMoves
+      );
 
       // Base score = 5 * 5 * 100 = 2500
       expect(result.baseScore).toBe(2500);
@@ -21,7 +25,11 @@ describe('ScoreCalculator', () => {
     it('should give 2x time multiplier for very fast completion', () => {
       const config = DIFFICULTY_CONFIG[Difficulty.EASY];
       // Complete faster than ideal time
-      const result = calculator.calculate(Difficulty.EASY, config.idealTime - 10, config.idealMoves);
+      const result = calculator.calculate(
+        Difficulty.EASY,
+        config.idealTime - 10,
+        config.idealMoves
+      );
 
       expect(result.timeMultiplier).toBe(2.0);
     });
@@ -64,7 +72,11 @@ describe('ScoreCalculator', () => {
 
     it('should give 2x moves multiplier for very few moves', () => {
       const config = DIFFICULTY_CONFIG[Difficulty.EASY];
-      const result = calculator.calculate(Difficulty.EASY, config.idealTime, config.idealMoves - 5);
+      const result = calculator.calculate(
+        Difficulty.EASY,
+        config.idealTime,
+        config.idealMoves - 5
+      );
 
       expect(result.movesMultiplier).toBe(2.0);
     });

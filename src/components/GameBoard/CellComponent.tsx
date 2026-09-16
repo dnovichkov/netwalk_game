@@ -8,7 +8,11 @@ interface CellComponentProps {
   onContextMenu: (e: React.MouseEvent) => void;
 }
 
-export function CellComponent({ cell, onClick, onContextMenu }: CellComponentProps) {
+export function CellComponent({
+  cell,
+  onClick,
+  onContextMenu,
+}: CellComponentProps) {
   // Track cumulative rotation for smooth animation
   const cumulativeRotationRef = useRef(cell.rotation * 90);
   const prevRotationRef = useRef(cell.rotation);
@@ -111,11 +115,32 @@ function ServerIcon() {
       <line x1="50" y1="100" x2="50" y2="75" className="cable connected" />
       <line x1="0" y1="50" x2="25" y2="50" className="cable connected" />
       {/* Server body */}
-      <rect x="25" y="25" width="50" height="50" rx="5" className="server-body" />
+      <rect
+        x="25"
+        y="25"
+        width="50"
+        height="50"
+        rx="5"
+        className="server-body"
+      />
       <circle cx="40" cy="40" r="5" className="server-led" />
       <circle cx="60" cy="40" r="5" className="server-led" />
-      <rect x="35" y="55" width="30" height="5" rx="2" className="server-slot" />
-      <rect x="35" y="63" width="30" height="5" rx="2" className="server-slot" />
+      <rect
+        x="35"
+        y="55"
+        width="30"
+        height="5"
+        rx="2"
+        className="server-slot"
+      />
+      <rect
+        x="35"
+        y="63"
+        width="30"
+        height="5"
+        rx="2"
+        className="server-slot"
+      />
     </svg>
   );
 }
@@ -133,11 +158,32 @@ function ComputerIcon({ connected }: CableProps) {
       {/* Cable going up */}
       <line x1="50" y1="0" x2="50" y2="30" className={cableClass} />
       {/* Computer monitor */}
-      <rect x="25" y="30" width="50" height="40" rx="3" className="computer-body" />
-      <rect x="30" y="35" width="40" height="28" rx="2" className={screenClass} />
+      <rect
+        x="25"
+        y="30"
+        width="50"
+        height="40"
+        rx="3"
+        className="computer-body"
+      />
+      <rect
+        x="30"
+        y="35"
+        width="40"
+        height="28"
+        rx="2"
+        className={screenClass}
+      />
       {/* Stand */}
       <rect x="40" y="70" width="20" height="8" className="computer-stand" />
-      <rect x="30" y="78" width="40" height="5" rx="2" className="computer-base" />
+      <rect
+        x="30"
+        y="78"
+        width="40"
+        height="5"
+        rx="2"
+        className="computer-base"
+      />
     </svg>
   );
 }

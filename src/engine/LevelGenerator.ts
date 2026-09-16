@@ -330,7 +330,11 @@ export class LevelGenerator {
       case 2: {
         // Check if opposite (STRAIGHT) or adjacent (CORNER)
         const [d1, d2] = directions;
-        if (d1 !== undefined && d2 !== undefined && areDirectionsOpposite(d1, d2)) {
+        if (
+          d1 !== undefined &&
+          d2 !== undefined &&
+          areDirectionsOpposite(d1, d2)
+        ) {
           return CellType.STRAIGHT;
         }
         return CellType.CORNER;

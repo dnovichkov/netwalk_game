@@ -138,7 +138,9 @@ describe('LevelGenerator', () => {
       const easyConfig = DIFFICULTY_CONFIG[Difficulty.EASY];
       const mediumConfig = DIFFICULTY_CONFIG[Difficulty.MEDIUM];
 
-      expect(mediumConfig.minComputers).toBeGreaterThan(easyConfig.minComputers);
+      expect(mediumConfig.minComputers).toBeGreaterThan(
+        easyConfig.minComputers
+      );
     });
 
     it('HARD should have larger grid than MEDIUM', () => {
@@ -209,4 +211,3 @@ describe('LevelGenerator', () => {
     });
   });
 });
-

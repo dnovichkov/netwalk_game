@@ -22,7 +22,9 @@ export function WinScreen({ onPlayAgain, onMainMenu }: WinScreenProps) {
   const lastScore = useGameStore((state) => state.lastScore);
   const addEntry = useLeaderboardStore((state) => state.addEntry);
   const isNewRecord = useLeaderboardStore((state) => state.isNewRecord);
-  const incrementGamesWon = useLeaderboardStore((state) => state.incrementGamesWon);
+  const incrementGamesWon = useLeaderboardStore(
+    (state) => state.incrementGamesWon
+  );
   const addTime = useLeaderboardStore((state) => state.addTime);
   const addMoves = useLeaderboardStore((state) => state.addMoves);
   const { playWinMelody } = useSound();
@@ -51,7 +53,15 @@ export function WinScreen({ onPlayAgain, onMainMenu }: WinScreenProps) {
       moves: gameState.moves,
       time: gameState.elapsedTime,
     });
-  }, [gameState, lastScore, playWinMelody, incrementGamesWon, addTime, addMoves, addEntry]);
+  }, [
+    gameState,
+    lastScore,
+    playWinMelody,
+    incrementGamesWon,
+    addTime,
+    addMoves,
+    addEntry,
+  ]);
 
   if (!gameState || !lastScore) {
     return null;
@@ -84,7 +94,9 @@ export function WinScreen({ onPlayAgain, onMainMenu }: WinScreenProps) {
           </div>
           <div className="stat">
             <span className="stat-label">Время</span>
-            <span className="stat-value">{formatTime(gameState.elapsedTime)}</span>
+            <span className="stat-value">
+              {formatTime(gameState.elapsedTime)}
+            </span>
           </div>
         </div>
 

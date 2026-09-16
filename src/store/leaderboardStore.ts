@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import {
-  Difficulty,
-  LeaderboardEntry,
-  GameStatistics,
-} from '../engine/types';
+import { Difficulty, LeaderboardEntry, GameStatistics } from '../engine/types';
 
 interface LeaderboardStore {
   // State

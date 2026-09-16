@@ -28,10 +28,13 @@ export const useSettingsStore = create<SettingsStore>()(
     (set) => ({
       ...defaultSettings,
 
-      toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
-      toggleVibration: () => set((state) => ({ vibrationEnabled: !state.vibrationEnabled })),
+      toggleSound: () =>
+        set((state) => ({ soundEnabled: !state.soundEnabled })),
+      toggleVibration: () =>
+        set((state) => ({ vibrationEnabled: !state.vibrationEnabled })),
       toggleTimer: () => set((state) => ({ showTimer: !state.showTimer })),
-      toggleMoveCounter: () => set((state) => ({ showMoveCounter: !state.showMoveCounter })),
+      toggleMoveCounter: () =>
+        set((state) => ({ showMoveCounter: !state.showMoveCounter })),
       resetSettings: () => set(defaultSettings),
     }),
     {

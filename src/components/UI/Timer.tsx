@@ -8,7 +8,12 @@ export function Timer() {
   const isPlaying = useGameStore((state) => state.isPlaying);
 
   useEffect(() => {
-    if (!isPlaying || !gameState || gameState.isCompleted || gameState.isPaused) {
+    if (
+      !isPlaying ||
+      !gameState ||
+      gameState.isCompleted ||
+      gameState.isPaused
+    ) {
       return;
     }
 

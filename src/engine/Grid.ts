@@ -90,7 +90,10 @@ export class Grid {
   /**
    * Get all neighbors of a cell with their directions
    */
-  getNeighbors(x: number, y: number): Array<{ cell: Cell; direction: Direction }> {
+  getNeighbors(
+    x: number,
+    y: number
+  ): Array<{ cell: Cell; direction: Direction }> {
     const neighbors: Array<{ cell: Cell; direction: Direction }> = [];
 
     for (let dir = 0; dir < 4; dir++) {
@@ -133,7 +136,9 @@ export class Grid {
     const oppositeDirection = getOppositeDirection(direction);
 
     // Both cells must have connections facing each other
-    return cell1.hasConnection(direction) && cell2.hasConnection(oppositeDirection);
+    return (
+      cell1.hasConnection(direction) && cell2.hasConnection(oppositeDirection)
+    );
   }
 
   /**

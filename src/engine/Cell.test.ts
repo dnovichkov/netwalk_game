@@ -40,7 +40,12 @@ describe('Cell', () => {
 
   describe('getOpenDirections', () => {
     it('should return correct directions for STRAIGHT at rotation 0', () => {
-      const cell = new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 });
+      const cell = new Cell({
+        x: 0,
+        y: 0,
+        type: CellType.STRAIGHT,
+        rotation: 0,
+      });
       const dirs = cell.getOpenDirections();
       expect(dirs).toContain(Direction.NORTH);
       expect(dirs).toContain(Direction.SOUTH);
@@ -58,13 +63,23 @@ describe('Cell', () => {
 
   describe('hasConnection', () => {
     it('should return true for connected directions', () => {
-      const cell = new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 });
+      const cell = new Cell({
+        x: 0,
+        y: 0,
+        type: CellType.STRAIGHT,
+        rotation: 0,
+      });
       expect(cell.hasConnection(Direction.NORTH)).toBe(true);
       expect(cell.hasConnection(Direction.SOUTH)).toBe(true);
     });
 
     it('should return false for non-connected directions', () => {
-      const cell = new Cell({ x: 0, y: 0, type: CellType.STRAIGHT, rotation: 0 });
+      const cell = new Cell({
+        x: 0,
+        y: 0,
+        type: CellType.STRAIGHT,
+        rotation: 0,
+      });
       expect(cell.hasConnection(Direction.EAST)).toBe(false);
       expect(cell.hasConnection(Direction.WEST)).toBe(false);
     });
@@ -142,18 +157,18 @@ describe('Cell', () => {
 
   describe('canRotate', () => {
     it('should return true for rotatable types', () => {
-      expect(new Cell({ x: 0, y: 0, type: CellType.STRAIGHT }).canRotate()).toBe(
-        true
-      );
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.STRAIGHT }).canRotate()
+      ).toBe(true);
       expect(new Cell({ x: 0, y: 0, type: CellType.CORNER }).canRotate()).toBe(
         true
       );
-      expect(new Cell({ x: 0, y: 0, type: CellType.T_JUNCTION }).canRotate()).toBe(
-        true
-      );
-      expect(new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).canRotate()).toBe(
-        true
-      );
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.T_JUNCTION }).canRotate()
+      ).toBe(true);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).canRotate()
+      ).toBe(true);
     });
 
     it('should return false for fixed types', () => {
@@ -170,7 +185,12 @@ describe('Cell', () => {
 
     it('should return false for locked cells', () => {
       expect(
-        new Cell({ x: 0, y: 0, type: CellType.CORNER, isLocked: true }).canRotate()
+        new Cell({
+          x: 0,
+          y: 0,
+          type: CellType.CORNER,
+          isLocked: true,
+        }).canRotate()
       ).toBe(false);
     });
   });
@@ -186,16 +206,18 @@ describe('Cell', () => {
     });
 
     it('isComputer should return true only for COMPUTER type', () => {
-      expect(new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).isComputer()).toBe(
-        true
-      );
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).isComputer()
+      ).toBe(true);
       expect(new Cell({ x: 0, y: 0, type: CellType.SERVER }).isComputer()).toBe(
         false
       );
     });
 
     it('isEmpty should return true only for EMPTY type', () => {
-      expect(new Cell({ x: 0, y: 0, type: CellType.EMPTY }).isEmpty()).toBe(true);
+      expect(new Cell({ x: 0, y: 0, type: CellType.EMPTY }).isEmpty()).toBe(
+        true
+      );
       expect(new Cell({ x: 0, y: 0, type: CellType.CORNER }).isEmpty()).toBe(
         false
       );
@@ -211,13 +233,27 @@ describe('Cell', () => {
 
   describe('getConnectionCount', () => {
     it('should return correct connection counts', () => {
-      expect(new Cell({ x: 0, y: 0, type: CellType.EMPTY }).getConnectionCount()).toBe(0);
-      expect(new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).getConnectionCount()).toBe(1);
-      expect(new Cell({ x: 0, y: 0, type: CellType.STRAIGHT }).getConnectionCount()).toBe(2);
-      expect(new Cell({ x: 0, y: 0, type: CellType.CORNER }).getConnectionCount()).toBe(2);
-      expect(new Cell({ x: 0, y: 0, type: CellType.T_JUNCTION }).getConnectionCount()).toBe(3);
-      expect(new Cell({ x: 0, y: 0, type: CellType.CROSS }).getConnectionCount()).toBe(4);
-      expect(new Cell({ x: 0, y: 0, type: CellType.SERVER }).getConnectionCount()).toBe(4);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.EMPTY }).getConnectionCount()
+      ).toBe(0);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.COMPUTER }).getConnectionCount()
+      ).toBe(1);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.STRAIGHT }).getConnectionCount()
+      ).toBe(2);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.CORNER }).getConnectionCount()
+      ).toBe(2);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.T_JUNCTION }).getConnectionCount()
+      ).toBe(3);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.CROSS }).getConnectionCount()
+      ).toBe(4);
+      expect(
+        new Cell({ x: 0, y: 0, type: CellType.SERVER }).getConnectionCount()
+      ).toBe(4);
     });
   });
 

@@ -167,7 +167,9 @@ describe('getOpenDirections', () => {
 
     it('should rotate its connection', () => {
       expect(getOpenDirections(CellType.COMPUTER, 1)).toContain(Direction.EAST);
-      expect(getOpenDirections(CellType.COMPUTER, 2)).toContain(Direction.SOUTH);
+      expect(getOpenDirections(CellType.COMPUTER, 2)).toContain(
+        Direction.SOUTH
+      );
       expect(getOpenDirections(CellType.COMPUTER, 3)).toContain(Direction.WEST);
     });
   });

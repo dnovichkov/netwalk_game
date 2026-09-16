@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import {
-  GameState,
-  Difficulty,
-  CellData,
-} from '../engine/types';
+import { GameState, Difficulty, CellData } from '../engine/types';
 import { Grid } from '../engine/Grid';
 import { LevelGenerator } from '../engine/LevelGenerator';
 import { ConnectionValidator } from '../engine/ConnectionValidator';
@@ -47,204 +43,206 @@ export const useGameStore = create<GameStore>()(
       lastScore: null,
 
       newGame: (difficulty: Difficulty) => {
-    const gameState = levelGenerator.generate(difficulty);
-    set({
-      gameState,
-      isPlaying: true,
-      history: [],
-      lastScore: null,
-    });
-  },
-
-  rotateCell: (x: number, y: number, clockwise: boolean) => {
-    const { gameState, history } = get();
-    if (!gameState || gameState.isCompleted || gameState.isPaused) return;
-
-    const cellData = gameState.grid[y]?.[x];
-    if (!cellData || cellData.isLocked) return;
-
-    // Save to history for undo
-    const historyEntry: HistoryEntry = {
-      x,
-      y,
-      previousRotation: cellData.rotation,
-    };
-
-    // Create new grid data with rotated cell
-    const newGrid = gameState.grid.map((row, rowIdx) =>
-      row.map((cell, colIdx) => {
-        if (rowIdx === y && colIdx === x) {
-          const newRotation = clockwise
-            ? (cell.rotation + 1) % 4
-            : (cell.rotation + 3) % 4;
-          return { ...cell, rotation: newRotation };
-        }
-        return cell;
-      })
-    );
-
-    // Check connections using Grid class (single validation pass)
-    const grid = Grid.fromData(newGrid);
-    const validation = connectionValidator.validate(grid);
-    const isSolved = validation.isValid;
-
-    // Update grid data with connection status
-    const updatedGrid: CellData[][] = [];
-    for (let row = 0; row < gameState.height; row++) {
-      const rowData: CellData[] = [];
-      for (let col = 0; col < gameState.width; col++) {
-        const cell = grid.getCell(col, row);
-        if (cell) {
-          rowData.push(cell.toData());
-        }
-      }
-      updatedGrid.push(rowData);
-    }
-
-    const newState: GameState = {
-      ...gameState,
-      grid: updatedGrid,
-      moves: gameState.moves + 1,
-      isCompleted: isSolved,
-    };
-
-    let lastScore: ScoreResult | null = null;
-    if (isSolved) {
-      newState.elapsedTime = Math.floor((Date.now() - gameState.startTime) / 1000);
-      lastScore = scoreCalculator.calculate(
-        gameState.difficulty,
-        newState.elapsedTime,
-        newState.moves
-      );
-    }
-
-    set({
-      gameState: newState,
-      history: [...history, historyEntry],
-      lastScore,
-    });
-  },
-
-  undo: () => {
-    const { gameState, history } = get();
-    if (!gameState || gameState.isCompleted || history.length === 0) return;
-
-    const lastEntry = history[history.length - 1];
-    if (!lastEntry) return;
-
-    const newGrid = gameState.grid.map((row, rowIdx) =>
-      row.map((cell, colIdx) => {
-        if (rowIdx === lastEntry.y && colIdx === lastEntry.x) {
-          return { ...cell, rotation: lastEntry.previousRotation };
-        }
-        return cell;
-      })
-    );
-
-    // Update connections
-    const grid = Grid.fromData(newGrid);
-    connectionValidator.findConnectedCells(grid);
-
-    const updatedGrid: CellData[][] = [];
-    for (let row = 0; row < gameState.height; row++) {
-      const rowData: CellData[] = [];
-      for (let col = 0; col < gameState.width; col++) {
-        const cell = grid.getCell(col, row);
-        if (cell) {
-          rowData.push(cell.toData());
-        }
-      }
-      updatedGrid.push(rowData);
-    }
-
-    set({
-      gameState: {
-        ...gameState,
-        grid: updatedGrid,
-        moves: Math.max(0, gameState.moves - 1),
+        const gameState = levelGenerator.generate(difficulty);
+        set({
+          gameState,
+          isPlaying: true,
+          history: [],
+          lastScore: null,
+        });
       },
-      history: history.slice(0, -1),
-    });
-  },
 
-  pause: () => {
-    const { gameState } = get();
-    if (!gameState || gameState.isCompleted) return;
+      rotateCell: (x: number, y: number, clockwise: boolean) => {
+        const { gameState, history } = get();
+        if (!gameState || gameState.isCompleted || gameState.isPaused) return;
 
-    set({
-      gameState: {
-        ...gameState,
-        isPaused: true,
-        elapsedTime: Math.floor((Date.now() - gameState.startTime) / 1000),
-      },
-      isPlaying: false,
-    });
-  },
+        const cellData = gameState.grid[y]?.[x];
+        if (!cellData || cellData.isLocked) return;
 
-  resume: () => {
-    const { gameState } = get();
-    if (!gameState || gameState.isCompleted) return;
+        // Save to history for undo
+        const historyEntry: HistoryEntry = {
+          x,
+          y,
+          previousRotation: cellData.rotation,
+        };
 
-    set({
-      gameState: {
-        ...gameState,
-        isPaused: false,
-        startTime: Date.now() - gameState.elapsedTime * 1000,
-      },
-      isPlaying: true,
-    });
-  },
+        // Create new grid data with rotated cell
+        const newGrid = gameState.grid.map((row, rowIdx) =>
+          row.map((cell, colIdx) => {
+            if (rowIdx === y && colIdx === x) {
+              const newRotation = clockwise
+                ? (cell.rotation + 1) % 4
+                : (cell.rotation + 3) % 4;
+              return { ...cell, rotation: newRotation };
+            }
+            return cell;
+          })
+        );
 
-  tick: () => {
-    const { gameState } = get();
-    if (!gameState || gameState.isCompleted || gameState.isPaused) return;
+        // Check connections using Grid class (single validation pass)
+        const grid = Grid.fromData(newGrid);
+        const validation = connectionValidator.validate(grid);
+        const isSolved = validation.isValid;
 
-    set({
-      gameState: {
-        ...gameState,
-        elapsedTime: Math.floor((Date.now() - gameState.startTime) / 1000),
-      },
-    });
-  },
-
-  reset: () => {
-    set({
-      gameState: null,
-      isPlaying: false,
-      history: [],
-      lastScore: null,
-    });
-  },
-
-  loadGame: (state: GameState) => {
-    // Restore connection state
-    const grid = Grid.fromData(state.grid);
-    connectionValidator.findConnectedCells(grid);
-
-    const updatedGrid: CellData[][] = [];
-    for (let row = 0; row < state.height; row++) {
-      const rowData: CellData[] = [];
-      for (let col = 0; col < state.width; col++) {
-        const cell = grid.getCell(col, row);
-        if (cell) {
-          rowData.push(cell.toData());
+        // Update grid data with connection status
+        const updatedGrid: CellData[][] = [];
+        for (let row = 0; row < gameState.height; row++) {
+          const rowData: CellData[] = [];
+          for (let col = 0; col < gameState.width; col++) {
+            const cell = grid.getCell(col, row);
+            if (cell) {
+              rowData.push(cell.toData());
+            }
+          }
+          updatedGrid.push(rowData);
         }
-      }
-      updatedGrid.push(rowData);
-    }
 
-    set({
-      gameState: {
-        ...state,
-        grid: updatedGrid,
-        startTime: Date.now() - state.elapsedTime * 1000,
-        isPaused: false,
+        const newState: GameState = {
+          ...gameState,
+          grid: updatedGrid,
+          moves: gameState.moves + 1,
+          isCompleted: isSolved,
+        };
+
+        let lastScore: ScoreResult | null = null;
+        if (isSolved) {
+          newState.elapsedTime = Math.floor(
+            (Date.now() - gameState.startTime) / 1000
+          );
+          lastScore = scoreCalculator.calculate(
+            gameState.difficulty,
+            newState.elapsedTime,
+            newState.moves
+          );
+        }
+
+        set({
+          gameState: newState,
+          history: [...history, historyEntry],
+          lastScore,
+        });
       },
-      isPlaying: true,
-      history: [],
-      lastScore: null,
-    });
-  },
+
+      undo: () => {
+        const { gameState, history } = get();
+        if (!gameState || gameState.isCompleted || history.length === 0) return;
+
+        const lastEntry = history[history.length - 1];
+        if (!lastEntry) return;
+
+        const newGrid = gameState.grid.map((row, rowIdx) =>
+          row.map((cell, colIdx) => {
+            if (rowIdx === lastEntry.y && colIdx === lastEntry.x) {
+              return { ...cell, rotation: lastEntry.previousRotation };
+            }
+            return cell;
+          })
+        );
+
+        // Update connections
+        const grid = Grid.fromData(newGrid);
+        connectionValidator.findConnectedCells(grid);
+
+        const updatedGrid: CellData[][] = [];
+        for (let row = 0; row < gameState.height; row++) {
+          const rowData: CellData[] = [];
+          for (let col = 0; col < gameState.width; col++) {
+            const cell = grid.getCell(col, row);
+            if (cell) {
+              rowData.push(cell.toData());
+            }
+          }
+          updatedGrid.push(rowData);
+        }
+
+        set({
+          gameState: {
+            ...gameState,
+            grid: updatedGrid,
+            moves: Math.max(0, gameState.moves - 1),
+          },
+          history: history.slice(0, -1),
+        });
+      },
+
+      pause: () => {
+        const { gameState } = get();
+        if (!gameState || gameState.isCompleted) return;
+
+        set({
+          gameState: {
+            ...gameState,
+            isPaused: true,
+            elapsedTime: Math.floor((Date.now() - gameState.startTime) / 1000),
+          },
+          isPlaying: false,
+        });
+      },
+
+      resume: () => {
+        const { gameState } = get();
+        if (!gameState || gameState.isCompleted) return;
+
+        set({
+          gameState: {
+            ...gameState,
+            isPaused: false,
+            startTime: Date.now() - gameState.elapsedTime * 1000,
+          },
+          isPlaying: true,
+        });
+      },
+
+      tick: () => {
+        const { gameState } = get();
+        if (!gameState || gameState.isCompleted || gameState.isPaused) return;
+
+        set({
+          gameState: {
+            ...gameState,
+            elapsedTime: Math.floor((Date.now() - gameState.startTime) / 1000),
+          },
+        });
+      },
+
+      reset: () => {
+        set({
+          gameState: null,
+          isPlaying: false,
+          history: [],
+          lastScore: null,
+        });
+      },
+
+      loadGame: (state: GameState) => {
+        // Restore connection state
+        const grid = Grid.fromData(state.grid);
+        connectionValidator.findConnectedCells(grid);
+
+        const updatedGrid: CellData[][] = [];
+        for (let row = 0; row < state.height; row++) {
+          const rowData: CellData[] = [];
+          for (let col = 0; col < state.width; col++) {
+            const cell = grid.getCell(col, row);
+            if (cell) {
+              rowData.push(cell.toData());
+            }
+          }
+          updatedGrid.push(rowData);
+        }
+
+        set({
+          gameState: {
+            ...state,
+            grid: updatedGrid,
+            startTime: Date.now() - state.elapsedTime * 1000,
+            isPaused: false,
+          },
+          isPlaying: true,
+          history: [],
+          lastScore: null,
+        });
+      },
     }),
     {
       name: 'netwalk-game',
