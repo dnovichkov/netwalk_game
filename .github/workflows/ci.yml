@@ -117,3 +117,24 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  # Server image and deployment to netwalk-game.dmdp.ru: only for a push to the default branch,
+  # once every check is green. The shared workflows live in sites_configs next to the server's
+  # deploy script. GitHub Pages keeps publishing independently (deploy.yml).
+  image:
+    name: Publish Image
+    needs: [build, e2e]
+    if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+    uses: dnovichkov/sites_configs/.github/workflows/build-image.yml@main
+    permissions:
+      contents: read
+      packages: write
+    with:
+      image: netwalk-game
+
+  deploy:
+    name: Deploy
+    needs: [image]
+    if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
+    uses: dnovichkov/sites_configs/.github/workflows/deploy.yml@main
+    secrets: inherit

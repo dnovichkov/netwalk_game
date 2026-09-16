@@ -1,0 +1,32 @@
+# Production: the static build behind nginx, started on the server by the deploy script from
+# sites_configs. The server never builds — CI publishes the image to ghcr.io (see the image job in
+# .github/workflows/ci.yml) and the deploy script sets IMAGE_TAG to the commit sha it deploys.
+# `build` stays for local checks: docker compose -f docker-compose.prod.yml build
+#
+# No published ports: the Caddy reverse proxy from sites_configs terminates TLS and reaches the
+# container by its container_name on the shared `web` network. For development use
+# docker-compose.yml.
+
+# Pinned: the project name decides container and volume names on the server.
+name: netwalk_game
+
+services:
+  netwalk:
+    image: ghcr.io/dnovichkov/netwalk-game:${IMAGE_TAG:-latest}
+    build: .
+    container_name: netwalk-game
+    restart: unless-stopped
+    healthcheck:
+      # busybox wget from nginx:alpine. 127.0.0.1 rather than localhost: inside the container
+      # localhost may resolve to ::1, and nginx.conf listens on IPv4 only.
+      test: ['CMD-SHELL', 'wget -q --spider http://127.0.0.1/ || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
